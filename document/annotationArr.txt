@@ -1,0 +1,35 @@
+    ==  어노테이션 정리  ==
+
+    @Table - 엔티티와 매핑할 정보를 지정하고
+             사용법 : @Index(name ="원하는 명칭", columnList = "사용할 테이블명")
+                    name 부분을 생략하면 원래 이름 사용.
+
+    @Index - 데이터베이스 인덱스는 추가, 쓰기 및 저장 공간을 희생해서 테이블에 대한 데이터 검색 속도를 향상시키는 데이터 구조
+             사용법 : @Entity 와 세트로 사용
+
+    @Entity - Lombok 을 이용해서 클래스를 엔티티로 변경 @Entity 가 붙은 클래스는 JPA 가 관리하게 된다.
+
+    @Id - 전체 필드중에서 PK 표시 해주는 것 @Id 가 없으면 @Entity 어노테이션을 사용 못함
+
+    @GeneratedValue(strategy = GenerationType.IDENTITY) - 해당 필드가 auto_increment 인 경우 @GeneratedValue 를 써서 자동으로 값이 생성되게 해줘야 한다. (기본키 전략)
+
+    @Column - 해당 컬럼이 not null 인 경우 @Column(nullable =false) 써준다.
+                  기본 값은 true 라서 @Column 을 아예 안쓰면 null 가능
+                  사용법 : @Column(nullable = false, length = 숫자) 숫자 안쓰면 기본 값 255 적용
+
+    @Getter - 모든 필드의 getter 들이 생성
+    @Setter - 모든 필드의 setter 들이 생성
+    @ToString - 모든 필드의 toString 생성
+
+    @OrderBy("id") - 양방향 바인딩을 할건데 정렬 기준을 id 로 하겠다는 뜻
+
+    @OneToMany(mappedBy = "article", cascade = CascadeType.ALL)
+    @ToString.Exclude - 순환 참조 이슈를 해결해주는 어노테이션
+
+    @ManyToOne(optional = false) - 필수 값이라는 뜻
+
+    @CreatedDate - 최초에 insert 할 때 자동으로 한번 넣어준다.
+    @CreatedBy - 최초에 insert 할 때 자동으로 한번 넣어준다.
+    @LastModifiedDate - 작성 당시의 시간을 실시간으로 넣어준다.
+    @LastModifiedBy - 작성 당시의 작성자의 이름을 실시간으로 넣어준다.
+
