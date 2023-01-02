@@ -7,6 +7,7 @@ import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -23,6 +24,11 @@ import java.util.Set;
 *  3) 동등성, 동일성 비교 할 수 있는 코드 넣어볼 예정
 * */
 
+/*
+*
+*
+* */
+
 /** @Table - 엔티티와 매핑할 정보를 지정하고
              사용법 : @Index(name ="원하는 명칭", columnList = "사용할 테이블명")
                     name 부분을 생략하면 원래 이름 사용.
@@ -31,7 +37,7 @@ import java.util.Set;
              사용법 : @Entity 와 세트로 사용
 
  */
-
+@EntityListeners(AuditingEntityListener.class)
 @Table(indexes = {
         @Index(columnList = "title"),  // 검색속도 빠르게 해주는 작업
         @Index(columnList = "hashtag"),
@@ -42,7 +48,7 @@ import java.util.Set;
 @Getter // 모든 필드의 getter 들이 생성
 @ToString // 모든 필드의 toString 생성
 //@ToString includes lazy loaded fields and/or associations. This can cause performance and memory consumption issues. 이 어노테이션을 사용하면 최초에 로드 할 때
-public class Article {
+public class Article extends AuditingFields {
 
     @Id // 전체 필드중에서 PK 표시 해주는 것 @Id 가 없으면 @Entity 어노테이션을 사용 못함
     @GeneratedValue(strategy = GenerationType.IDENTITY) // 해당 필드가 auto_increment 인 경우 @GeneratedValue 를 써서 자동으로 값이 생성되게 해줘야 한다. (기본키 전략)
@@ -73,10 +79,7 @@ public class Article {
     private String hashtag; // 해시태그
 
     /* 양방향 바인딩
-    *
-    *
-    *
-    *
+
     * */
     @OrderBy("id") // 양방향 바인딩을 할건데 정렬 기준을 id 로 하겠다는 뜻
     @OneToMany(mappedBy = "article", cascade = CascadeType.ALL)
@@ -98,32 +101,69 @@ public class Article {
                      반대로 글이 댓글을 참조하는건 일반적인 경우는 아니기 때문에 Article 에 Exclude 를 걸어준다.
     * */
 
-
-
     /**
        JPA auditing : JPA 에서 자동으로 세팅하게 해줄 때 사용하는 기능
                       이거 하려면 config 파일이 별도로 있어야 한다.
                       config 패키지 만들어서 JapConfig 클래스 만들자.
     */
 
-    //메타데이터
-    @CreatedDate
-    @Column(nullable = false)
-    private LocalDateTime createAt; // 생성일자
+    /** 할 일 : Article 과 ArticleComment 에 있는 공통 필드(메타데이터. ID 제외)들을 별도로 빼서 관리할거임.
+        이유는 앞으로 Article 과 ArticleComment 처럼 FK 같은거로 엮여있는 테이블들 만들경우,
+        모든 domain 안에 있는 파일들에 많은 중복 코드들이 들어가게 된다.
+        그래서 별도의 파일에 공통되는 것들을 다 몰아넣고 사용하는거 해보기
+
+        참고 : 공통필드를 빼는걸 팀마다 다른다.
+          중복코드를 싫어해서 한 파일에 다 몰아두는 사람들이 있고,
+          (유지보수)
+
+          중보코드를 괜찮아 해서 각 파일에 그냥 두는 사람도 있다.
+          (각 파일에 모든 정보다 다 있다. 변경시 유연하게 코드 작업을 할 수 있다)
+
+        추출은 두가지 방법으로 할 수 있다.
+        1) @Embedded - 공통되는 필드들을 하나의 클래스로 만들어서 @Embedded 있는 곳에서 치환 하는 방식
+
+        2) @MappedSuperClass - (요즘 실무에서 사용)
+                  @MappedSuperClass 어노테이션이 붙은곳에서 사용
+
+        둘의 차이: 사실은 둘이 비슷 하지만 @Embedded 방식을 하게 되면 필드가 하나 추가된다.
+                  영속성 컨텍스트를 통해서 데이터를 넘겨 받아서 어플리케이션으로 열었을 때에는 어차피 AuditingField 랑 똑같이 보인다.
+                   (중간에 한단계가 더 있다는 뜻)
+
+                   @MappedSuperClass 는 표준 JPA 에서 제공해주는 클래스. 중간단계 따로 없이 바로 동작
+
+     */
+
+/***************************************************/
+    /* 1) Embedded 방식 */
+//    class Tmp {
+//        @CreatedDate @Column(nullable = false) private LocalDateTime createAt; // 생성일자
+//        @CreatedBy @Column(nullable = false,length = 100) private String createBy; // 생성자
+//        @LastModifiedDate @Column(nullable = false) private LocalDateTime modifiedAt; // 수정일자
+//        @LastModifiedBy @Column(nullable = false,length = 100) private String modifiedBy; // 수정자
+//    }
+//    @Embedded Tmp tmp;
+
+
+//    //메타데이터
+//    @CreatedDate
+//    @Column(nullable = false)
+//    private LocalDateTime createAt; // 생성일자
+//
+//    @CreatedBy
+//    @Column(nullable = false,length = 100)
+//    private String createBy; // 생성자
+//
+//    @LastModifiedDate
+//    @Column(nullable = false)
+//    private LocalDateTime modifiedAt; // 수정일자
+//
+//    @LastModifiedBy
+//    @Column(nullable = false,length = 100)
+//    private String modifiedBy; // 수정자
+/*************************************************/
+
     /* 다른 생성일시 같은 것들은 알아낼 수 있는데, 최초 생성자는 (현재 코드 상태) 인증 받고 오지 않았기 때문에 따로 알아낼 수가 없다.
-    * 이 떄 만들어 놓은 jpaConfig 파일을 사용한다. */
-
-    @CreatedBy
-    @Column(nullable = false,length = 100)
-    private String createBy; // 생성자
-
-    @LastModifiedDate
-    @Column(nullable = false)
-    private LocalDateTime modifiedAt; // 수정일자
-
-    @LastModifiedBy
-    @Column(nullable = false,length = 100)
-    private String modifiedBy; // 수정자
+     * 이 떄 만들어 놓은 jpaConfig 파일을 사용한다. */
 
     /** 위에 처럼 어노테이션을 붙여주기만 하면 auditing 이 작동한다.
         @CreatedDate : 최초에 insert 할 때 자동으로 한번 넣어준다.
