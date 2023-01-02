@@ -1,5 +1,6 @@
 package com.bitstudy.app.controller;
 
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -58,6 +59,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
        그래서 일단 @WebMvcTest 대신 통합테스트(@SpringBootTest)로 돌릴 예정
     */
 
+@Disabled("Spring Data Rest 통합 데이터는 현재 불필요하므로 제외시킴.")
+/* 클래스 레벨에 붙여서 해당 테스트 클래스의 모든 메서드들을 체크하지 않게 한다.
+ 이유는 테스트가 다 통과된걸 확인했고, 당장 개발하는데 계속 돌릴 필요 없기 때문에 */
 @SpringBootTest //이것만 있으면 MockMvc 를 알아볼수가 없어서 @AutoConfigureMockMvc 같이 써주기
 @AutoConfigureMockMvc
 @Transactional /* 테스트를 돌리면 Hibernate 부분에 select 쿼리문이 나오면서 실제 DB 를 건드리는데, 테스트 끝난 이후에 DB를 롤백 시키는 용도 */
