@@ -3,6 +3,7 @@ package com.bitstudy.app.controller;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.List;
@@ -34,4 +35,13 @@ public class ArticleController {
         map.addAttribute("articles",List.of());
         return "index";
     }
+
+    @GetMapping("/{articleId}}")
+    public String article(@PathVariable Long articleId, ModelMap map){
+//        map.addAttribute(articleId);
+        map.addAttribute("article",null); // 지금 당장은 받아오지 않기 때문에 null 이라고 넣었지만, 테스트 할때에는 문자열을 넣어줘서 모델에 담기도록 변경하기.
+        map.addAttribute("articleComment",List.of());
+        return "detail";
+    }
+
 }
