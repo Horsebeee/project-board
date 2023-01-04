@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<thlogic>
+    <attr sel="#header" th:replace="header :: #header"/>
+    <attr sel="#footer" th:replace="footer :: #footer"/>
+</thlogic>
+
+<!-- 디커플드 로직이 제대로 연결이 됐으면 파일명 부분 또는 아이디명 컨트롤 클릭하면 해당파일로 이동 -->
