@@ -1,17 +1,22 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<!-- xmlns:th="http://www.thymeleaf.org"
+    이걸 넣으면 이 문서는 타임리프 템프릿이다. 라고 알려준다.
+    그런데 회색처리 되어있다. 2버전에서는 필수였는데 3 에서부터는 생략해도 된다.
+    공식문서에는 아직 있으니까 넣어봤음
+ -->
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
 </head>
 <body>
+    <header th:replace="~{header :: #header}"></header>
+<!-- 헤더를 컴포넌트로 변경하는 방법
+     th:replace="~{header :: #header}"  // th:replace="~{파일명 :: #id명}"-->
+
     <!-- 이 파일이 있어야 테스트의 articlesAll() 테스트를 돌려볼 수 있음
          이 파일의 코드가 바뀔 때 마다 리컴파일 해주는걸 추천(Ctrl + Shift +F9), 혹시 안되면 ctrl + S 하고 리컴파일 재시도
     -->
-    <header>
-      헤더
-      <hr/>
-    </header>
 
     <main>
       <form action="#">
@@ -57,11 +62,12 @@
           </tr>
         </tbody>
       </table>
+
+      <!-- 페이지네이션 -->
+
+
     </main>
-<!-- 페이지네이션 -->
-    <footer>
-      <hr/>
-      푸터
-    </footer>
+    <footer th:replace="~{footer :: #footer}"></footer>
+
 </body>
 </html>
