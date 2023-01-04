@@ -40,4 +40,8 @@ spring:
       #  DEFAULT - 모든 public 레포지토리 인터페이스를 표시할건데, 그러나 @(Repository)RestResource 가 포함된것만 노출
       #  ALL - 모든 레포지토리
       #  ANNOTATED - 지정한 것만 노출
-      #  VISIBILITY - 레포포지토리를 public 으로 노출한것만
+      #  VISIBILITY - repository 를 public 으로 노출한것만
+
+  thymeleaf3: # thymeleaf3 이름은 @ConfigurationProperties("spring.thymeleaf3") 에서 가져옴
+    decoupled-logic : true #false 로 주면 타임리프 기능 사용 안한다는 뜻.
+
