@@ -47,7 +47,7 @@ class ArticleControllerTest {
                 /*  뷰 를 만들고 있으니까 htm 로 코드를 짜고 있을 거임. /articles 로 받아온 데이터의 미디어 타입이 html 타입으로 되어 있는지 확인
                     contentType 의 경우 exact math 라서 미디어 타입이 딱 text/html 로 나오는 것만 허용
                     contentTypeCompatibleWith 를 이용해서 호환되는 타입까지 허용 */
-                .andExpect(view().name("index"))
+                .andExpect(view().name("articles/index"))
                 // 가져온 뷰 파일명이 index 인지 확인
                 .andExpect(model().attributeExists("articles"));
                 /*  이 뷰에서는 게시글들이 떠야 하는데, 그 말은 서버에서 데이터들을 가져왔다는 말이다.
@@ -62,9 +62,9 @@ class ArticleControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.TEXT_HTML))
                 .andExpect(view().name("articles/detail"))
-                .andExpect(model().attributeExists("articles"))
+            .andExpect(model().attributeExists("articles"))
                 .andExpect(model().attributeExists("articlesComments"));
-    }
+}
 
     /* 게시판 검색 전용 */
     @Test

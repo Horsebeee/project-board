@@ -21,8 +21,15 @@ repositories {
 dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-actuator'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
+
+	// spring security 추가
+	implementation 'org.springframework.boot:spring-boot-starter-security'
+
 	//thymeleaf 추가
 	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+
+	// spring security + thymeleaf 같이 이용하려면 extra 필요
+	implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity5'
 
 	//JPA,H2,MySQL dependency 추가
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'

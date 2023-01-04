@@ -26,22 +26,22 @@ import java.util.List;
 public class ArticleController {
 
     @GetMapping
-    public String atricles(ModelMap map) {
+    public String articles(ModelMap map) {
         /**
-            ModelMap : 테스트파일에서 .andExpect(model().attributeExists("articles/
+           ModelMap: 테스트파일에서 .andExpect(model().attributeExists("articles")); 를 이용해서 articles 라는 키값으로 데이터를 넣어주기로 했으니까 필요함.
 
-
-        */
+           Model 과 ModelMap는 같은거임. 차이점은 Model 은 인터페이스, ModelMap 은 클래스(구현체)
+         */
         map.addAttribute("articles",List.of());
-        return "index";
+        return "articles/index";
     }
 
     @GetMapping("/{articleId}}")
     public String article(@PathVariable Long articleId, ModelMap map){
 //        map.addAttribute(articleId);
         map.addAttribute("article",null); // 지금 당장은 받아오지 않기 때문에 null 이라고 넣었지만, 테스트 할때에는 문자열을 넣어줘서 모델에 담기도록 변경하기.
-        map.addAttribute("articleComment",List.of());
-        return "detail";
+        map.addAttribute("articleComments",List.of());
+        return "articles/detail";
     }
 
 }
